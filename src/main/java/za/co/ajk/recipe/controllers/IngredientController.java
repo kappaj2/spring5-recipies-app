@@ -63,7 +63,7 @@ public class IngredientController {
         model.addAttribute("ingredient", ingredientCommand);
         
         //init uom
-        ingredientCommand.setUnitOfMeasureCommand(new UnitOfMeasureCommand());
+        ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
         
         model.addAttribute("uomList",  unitOfMeasureService.listAllUoms());
         
