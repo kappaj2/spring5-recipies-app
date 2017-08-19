@@ -12,6 +12,7 @@ import za.co.ajk.recipe.commands.RecipeCommand;
 import za.co.ajk.recipe.converters.RecipeCommandToRecipe;
 import za.co.ajk.recipe.converters.RecipeToRecipeCommand;
 import za.co.ajk.recipe.domain.Recipe;
+import za.co.ajk.recipe.exceptions.NotFoundException;
 import za.co.ajk.recipe.repositories.RecipeRepository;
 
 @Slf4j
@@ -43,7 +44,7 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipeOptional = recipeRepository.findById(l);
         
         if (!recipeOptional.isPresent()) {
-            throw new RuntimeException("Recipe Not Found!");
+            throw new NotFoundException("Recipe Not Found!");
         }
         
         return recipeOptional.get();
