@@ -39,7 +39,9 @@ public class RecipeControllerTest {
         MockitoAnnotations.initMocks(this);
         
         controller = new RecipeController(recipeService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new ControllerExceptionHandler())  // enable mocking to handle controller advise. Not full Spring context here!!
+                .build();
     }
     
     @Test
