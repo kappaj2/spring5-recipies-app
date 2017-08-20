@@ -8,8 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javassist.tools.web.BadHttpRequest;
 import za.co.ajk.recipe.commands.RecipeCommand;
 import za.co.ajk.recipe.domain.Recipe;
+import za.co.ajk.recipe.exceptions.NotFoundException;
 import za.co.ajk.recipe.services.RecipeService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -66,13 +68,21 @@ public class RecipeControllerTest {
     
     @Test
     public void testGetRecipeNotFound() throws Exception{
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
-        when(recipeService.findById(anyLong())).thenReturn(recipe);
+
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
         mockMvc.perform(get("/recipe/1/show"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("recipe/show"))
-                .andExpect(model().attributeExists("recipe"));
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
+    }
+    
+    @Test
+    public void testGetRecipeBadRequest() throws Exception{
+        when(recipeService.findById(anyLong())).thenThrow(BadHttpRequest.class);
+    
+        mockMvc.perform(get("/recipe/1a/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
     }
     
     @Test
